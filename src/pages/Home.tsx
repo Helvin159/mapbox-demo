@@ -23,18 +23,11 @@ const mapContainerStyle = {
   margin: '0 auto',
 };
 
-const buttonStyle = {
-  padding: '0.5rem 1rem',
-  borderRadius: '0.5rem',
-  border: '1px solid #ccc',
-  backgroundColor: '#f0f0f0',
-};
-
 const Home = () => {
-  const mapRef = useRef(null);
+  const mapRef = useRef<mapboxgl.Map | null>(null);
 
-  const [latitude, setLatitude] = useState(42.7801);
-  const [longitude, setLongitude] = useState(-71.1114);
+  const [latitude] = useState(42.7801);
+  const [longitude] = useState(-71.1114);
 
   const [mapStyle, setMapStyle] = useState('mapbox://styles/mapbox/standard');
 
@@ -42,6 +35,9 @@ const Home = () => {
 
   const changeMapStyle = (value: string) => {
     switch (value) {
+      case 'custom':
+        setMapStyle('mapbox://styles/helvinrymer/cmikoyt81000601s775j5f62s');
+        break;
       case 'standard':
         setMapStyle('mapbox://styles/mapbox/standard');
         break;
@@ -79,7 +75,7 @@ const Home = () => {
     if (mapRef.current) return;
 
     mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_DEFAULT_PUBLIC_TOKEN;
-    mapRef.current = new (mapboxgl as any).Map({
+    mapRef.current = new mapboxgl.Map({
       container: 'map',
       style: mapStyle,
       center: [longitude, latitude],
@@ -96,24 +92,16 @@ const Home = () => {
 
   return (
     <div>
-      <h1>MapBox Demo</h1>
+      <h1 className="text-2xl">MapBox Demo</h1>
       <div style={containerStyle}>
         <div style={{ flexBasis: '30%' }}>
           <MapStyles changeMapStyle={changeMapStyle} />
 
           <div style={{ display: 'flex', gap: '1rem', padding: '1rem 0' }}>
-            <button
-              type="button"
-              onClick={() => setZoom(zoom + 1)}
-              style={buttonStyle}
-            >
+            <button type="button" onClick={() => setZoom(zoom + 1)}>
               Zoom In
             </button>
-            <button
-              type="button"
-              onClick={() => setZoom(zoom - 1)}
-              style={buttonStyle}
-            >
+            <button type="button" onClick={() => setZoom(zoom - 1)}>
               Zoom Out
             </button>
           </div>

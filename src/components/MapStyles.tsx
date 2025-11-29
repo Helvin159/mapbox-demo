@@ -9,6 +9,12 @@ const MapStyles = ({
   return (
     <RadioGroup defaultValue="standard" onValueChange={changeMapStyle}>
       <div>
+        <RadioGroupItem value="custom" id="custom">
+          Standard
+        </RadioGroupItem>
+        <label htmlFor="custom">Custom</label>
+      </div>
+      <div>
         <RadioGroupItem value="standard" id="standard">
           Standard
         </RadioGroupItem>
