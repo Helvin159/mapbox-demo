@@ -80,7 +80,25 @@ const Home = () => {
       style: mapStyle,
       center: [longitude, latitude],
       zoom: zoom,
+
+      attributionControl: false,
     });
+
+    // * Add attribution control
+    mapRef.current.addControl(
+      new mapboxgl.AttributionControl({
+        customAttribution: 'Map design by Helvin Rymer',
+      })
+    );
+    // * Add fullscreen control
+    mapRef.current.addControl(new mapboxgl.FullscreenControl());
+    mapRef.current.addControl(new mapboxgl.NavigationControl());
+    mapRef.current.addControl(
+      new mapboxgl.GeolocateControl({
+        trackUserLocation: true,
+        showUserHeading: true,
+      })
+    );
 
     return () => {
       if (mapRef.current) {
