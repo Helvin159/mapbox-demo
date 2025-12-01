@@ -13,7 +13,6 @@ A React application for testing and demonstrating Mapbox GL JS features. This pr
 - **TypeScript** 4.9.5
 - **Mapbox GL JS** 3.16.0
 - **React Router** 7.9.6
-- **Tailwind CSS** 4.1.17
 - **Create React App** 5.0.1
 
 ## Getting Started

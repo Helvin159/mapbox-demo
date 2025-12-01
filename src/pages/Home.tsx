@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import MapStyles from '../components/MapStyles';
+import { Geocoder } from '@mapbox/search-js-react';
 
 const containerStyle = {
   display: 'flex',
@@ -20,7 +21,7 @@ const mapDivStyle = {
 const mapContainerStyle = {
   height: '50vh',
   width: '100%',
-  margin: '0 auto',
+  margin: '1rem auto',
 };
 
 const Home = () => {
@@ -29,9 +30,9 @@ const Home = () => {
   const [latitude] = useState(42.7801);
   const [longitude] = useState(-71.1114);
 
-  const [mapStyle, setMapStyle] = useState('mapbox://styles/mapbox/standard');
+  const [searchValue, setSearchValue] = useState('');
 
-  const [zoom, setZoom] = useState(12);
+  const [mapStyle, setMapStyle] = useState('mapbox://styles/mapbox/standard');
 
   const changeMapStyle = (value: string) => {
     switch (value) {
@@ -79,10 +80,17 @@ const Home = () => {
       container: 'map',
       style: mapStyle,
       center: [longitude, latitude],
-      zoom: zoom,
+      zoom: 12,
 
       attributionControl: false,
     });
+    const marker = new mapboxgl.Marker({
+      color: '#000fff',
+    })
+      .setLngLat([longitude, latitude])
+      .addTo(mapRef.current);
+
+    console.log(marker);
 
     // * Add attribution control
     mapRef.current.addControl(
@@ -106,29 +114,39 @@ const Home = () => {
         mapRef.current = null;
       }
     };
-  }, [zoom, latitude, longitude, mapStyle]);
+  }, [latitude, longitude, mapStyle]);
 
   return (
     <div>
-      <h1 className="text-2xl">MapBox Demo</h1>
-      <div style={containerStyle}>
-        <div style={{ flexBasis: '30%' }}>
-          <MapStyles changeMapStyle={changeMapStyle} />
-
-          <div style={{ display: 'flex', gap: '1rem', padding: '1rem 0' }}>
-            <button type="button" onClick={() => setZoom(zoom + 1)}>
-              Zoom In
-            </button>
-            <button type="button" onClick={() => setZoom(zoom - 1)}>
-              Zoom Out
-            </button>
-          </div>
-        </div>
-
-        <div style={mapContainerStyle}>
-          <div id="map" style={mapDivStyle} />
-        </div>
+      <h1>MapBox Demo</h1>
+      <Geocoder
+        accessToken={process.env.REACT_APP_MAPBOX_DEFAULT_PUBLIC_TOKEN ?? ''}
+        map={mapRef.current as mapboxgl.Map}
+        mapboxgl={mapboxgl}
+        value={searchValue}
+        marker={true}
+        theme={{
+          variables: {
+            fontFamily: 'Poppins, sans-serif',
+            unit: '14px',
+            padding: '0',
+            borderRadius: '1rem',
+            boxShadow: '0 0 0 1px silver',
+          },
+        }}
+        onChange={d => {
+          setSearchValue(d);
+        }}
+        options={{
+          language: 'en',
+          country: 'US',
+        }}
+      />
+      <div style={mapContainerStyle}>
+        <div id="map" style={mapDivStyle} />
       </div>
+
+      <MapStyles changeMapStyle={changeMapStyle} />
     </div>
   );
 };
