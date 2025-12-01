@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
-import MapStyles from '../modules/mapbox/components/MapStyles';
+import MapStyles from '../../mapbox/components/MapStyles';
 import { Geocoder } from '@mapbox/search-js-react';
 
 const mapDivStyle = {
